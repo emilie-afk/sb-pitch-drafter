@@ -1,0 +1,6 @@
+{
+  "name": "daily-pitch-drafter",
+  "version": "1.0.0",
+  "description": "Password-protected pitch drafter that proxies Anthropic API calls.",
+  "private": true
+}

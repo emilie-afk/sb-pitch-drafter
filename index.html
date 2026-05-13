@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Pitch Drafter</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #fafaf7;
+  color: #2a2a2a;
+  line-height: 1.55;
+  padding: 20px;
+}
+.container { max-width: 760px; margin: 0 auto; }
+
+h1 { font-size: 22px; margin: 0 0 4px; }
+.subtitle { color: #777; font-size: 13px; margin-bottom: 20px; }
+
+.section { background: #fff; border: 1px solid #e5e3dc; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+.section h2 { font-size: 16px; margin: 0 0 14px; }
+
+.app-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+.link-btn { background: transparent; border: none; color: #888; font-size: 12px; cursor: pointer; padding: 0; text-decoration: underline; }
+.link-btn:hover { color: #555; }
+
+.form-row { display: flex; flex-direction: column; margin-bottom: 12px; }
+.form-row.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row.two-col > div { display: flex; flex-direction: column; }
+label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+input, select, textarea {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 9px 11px;
+  border: 1px solid #c8c5bb;
+  border-radius: 6px;
+  background: #fff;
+  color: #2a2a2a;
+  width: 100%;
+}
+textarea { resize: vertical; min-height: 80px; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: #6a8a3e; box-shadow: 0 0 0 2px rgba(106,138,62,0.15); }
+
+button {
+  border: 1px solid #c8c5bb;
+  background: #fff;
+  padding: 9px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  color: #2a2a2a;
+  font-weight: 500;
+}
+button:hover:not(:disabled) { background: #f3f1ea; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.primary { background: #6a8a3e; color: white; border-color: #6a8a3e; }
+button.primary:hover:not(:disabled) { background: #587431; }
+
+.muted { color: #888; font-size: 13px; }
+.loading { color: #888; font-style: italic; }
+.error { color: #a04949; background: #fdf0f0; padding: 10px; border-radius: 5px; font-size: 13px; }
+
+.pitch-output {
+  background: #fdfcf8;
+  border: 1px solid #e5e3dc;
+  border-radius: 6px;
+  padding: 14px;
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.copy-btn { margin-top: 10px; margin-right: 6px; }
+.send-fields { margin-bottom: 12px; padding: 12px; background: #f6f5ef; border: 1px solid #e5e3dc; border-radius: 6px; }
+.send-fields .form-row { margin-bottom: 8px; }
+.send-fields .form-row:last-child { margin-bottom: 0; }
+
+.login-box {
+  max-width: 360px;
+  margin: 80px auto;
+  background: #fff;
+  border: 1px solid #e5e3dc;
+  border-radius: 10px;
+  padding: 24px;
+}
+.login-box h1 { margin-bottom: 12px; }
+.login-box p { font-size: 13px; color: #777; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Daily Pitch Drafter</h1>
+    <p>Enter the app password to continue.</p>
+    <div class="form-row">
+      <input id="password-input" type="password" placeholder="App password" autocomplete="current-password" />
+    </div>
+    <button id="login-btn" class="primary">Unlock</button>
+    <div id="login-error" class="error" style="display:none; margin-top: 10px;"></div>
+  </div>
+</div>
+
+<div id="app-screen" class="container" style="display:none;">
+  <div class="app-header">
+    <h1>Daily Pitch Drafter</h1>
+    <button id="logout-btn" class="link-btn">Log out</button>
+  </div>
+
+  <div class="section">
+    <h2>Journalist query</h2>
+    <div class="form-row">
+      <label for="paste-input">Paste the full Slack query (auto-fills the fields below)</label>
+      <textarea id="paste-input" rows="5" placeholder="SUMMARY: ...&#10;CATEGORY: ...&#10;NAME: ...&#10;EMAIL: ...&#10;MEDIA OUTLET: ...&#10;DEADLINE DATE: ...&#10;QUERY: ..."></textarea>
+    </div>
+    <button id="parse-btn">Parse paste</button>
+
+    <hr style="border: none; border-top: 1px solid #eeece4; margin: 16px 0;">
+
+    <div class="form-row">
+      <label for="topic-input">Topic / feature name</label>
+      <input id="topic-input" type="text" placeholder="e.g. Father's Day Gift Guide" />
+    </div>
+    <div class="form-row two-col">
+      <div>
+        <label for="name-input">Journalist name</label>
+        <input id="name-input" type="text" placeholder="e.g. Bryan Elliott" />
+      </div>
+      <div>
+        <label for="outlet-input">Outlet</label>
+        <input id="outlet-input" type="text" placeholder="e.g. Inc. Magazine" />
+      </div>
+    </div>
+    <div class="form-row two-col">
+      <div>
+        <label for="email-input-q">Journalist email</label>
+        <input id="email-input-q" type="email" placeholder="e.g. producer@thegoodbrain.com" />
+      </div>
+      <div>
+        <label for="deadline-input">Deadline</label>
+        <input id="deadline-input" type="text" placeholder="e.g. 2026-05-17" />
+      </div>
+    </div>
+    <div class="form-row">
+      <label for="query-input">Query body</label>
+      <textarea id="query-input" rows="4" placeholder="The journalist's full request..."></textarea>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Draft pitch</h2>
+    <div class="form-row two-col">
+      <div>
+        <label for="brand-select">Brand</label>
+        <select id="brand-select">
+          <option value="Succulents Box">Succulents Box</option>
+          <option value="Photos to Sketches">Photos to Sketches</option>
+        </select>
+      </div>
+      <div>
+        <label for="product-input">Product or angle</label>
+        <input id="product-input" type="text" placeholder="e.g. a live cactus" />
+      </div>
+    </div>
+    <button id="generate-btn" class="primary">Generate pitch</button>
+    <div id="pitch-result" style="margin-top: 16px;"></div>
+  </div>
+</div>
+
+<script>
+const PW_KEY = "pitch-drafter-pw";
+
+function getPassword() { return localStorage.getItem(PW_KEY) || ""; }
+function setPassword(pw) { localStorage.setItem(PW_KEY, pw); }
+function clearPassword() { localStorage.removeItem(PW_KEY); }
+
+function escapeHtml(s) {
+  if (s == null) return "";
+  return String(s).replace(/[&<>"']/g, function(c) {
+    return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c];
+  });
+}
+
+async function callDraftApi(prompt) {
+  const resp = await fetch("/api/draft", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-app-password": getPassword(),
+    },
+    body: JSON.stringify({ prompt }),
+  });
+  if (resp.status === 401) {
+    clearPassword();
+    showLogin("Session expired. Please log in again.");
+    throw new Error("Unauthorized");
+  }
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error("Error " + resp.status + ": " + text);
+  }
+  const data = await resp.json();
+  return data.text || "";
+}
+
+function showLogin(errorMsg) {
+  document.getElementById("login-screen").style.display = "block";
+  document.getElementById("app-screen").style.display = "none";
+  const err = document.getElementById("login-error");
+  if (errorMsg) {
+    err.textContent = errorMsg;
+    err.style.display = "block";
+  } else {
+    err.style.display = "none";
+  }
+}
+
+function showApp() {
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("app-screen").style.display = "block";
+}
+
+async function tryLogin(password) {
+  try {
+    const resp = await fetch("/api/draft", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-app-password": password,
+      },
+      body: JSON.stringify({ ping: true }),
+    });
+    return resp.status === 200;
+  } catch (err) {
+    return false;
+  }
+}
+
+document.getElementById("login-btn").addEventListener("click", async function() {
+  const pw = document.getElementById("password-input").value;
+  if (!pw) return;
+  const btn = this;
+  btn.disabled = true; btn.textContent = "Checking...";
+  const ok = await tryLogin(pw);
+  btn.disabled = false; btn.textContent = "Unlock";
+  if (ok) {
+    setPassword(pw);
+    showApp();
+  } else {
+    const err = document.getElementById("login-error");
+    err.textContent = "Incorrect password.";
+    err.style.display = "block";
+  }
+});
+
+document.getElementById("password-input").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") document.getElementById("login-btn").click();
+});
+
+document.getElementById("logout-btn").addEventListener("click", function() {
+  clearPassword();
+  document.getElementById("password-input").value = "";
+  showLogin();
+});
+
+document.getElementById("parse-btn").addEventListener("click", function() {
+  const text = document.getElementById("paste-input").value;
+  if (!text.trim()) return;
+  const get = function(label) {
+    const re = new RegExp(label + ":\\s*(.+)", "i");
+    const m = text.match(re);
+    if (!m) return "";
+    return m[1].trim()
+      .replace(/^<mailto:([^|>]+).*$/, "$1")
+      .replace(/^<(https?:[^>]+)>.*$/, "$1");
+  };
+  const summary = get("SUMMARY");
+  const name = get("NAME");
+  const email = get("EMAIL");
+  const outlet = get("MEDIA OUTLET");
+  const deadlineDate = get("DEADLINE DATE");
+  const queryMatch = text.match(/QUERY:\s*([\s\S]+)$/i);
+  const queryBody = queryMatch ? queryMatch[1].trim() : "";
+
+  if (summary) document.getElementById("topic-input").value = summary;
+  if (name) document.getElementById("name-input").value = name;
+  if (outlet) document.getElementById("outlet-input").value = outlet;
+  if (email) document.getElementById("email-input-q").value = email;
+  if (deadlineDate) document.getElementById("deadline-input").value = deadlineDate;
+  if (queryBody) document.getElementById("query-input").value = queryBody;
+});
+
+document.getElementById("generate-btn").addEventListener("click", async function() {
+  const topic = document.getElementById("topic-input").value.trim();
+  const name = document.getElementById("name-input").value.trim();
+  const outlet = document.getElementById("outlet-input").value.trim();
+  const email = document.getElementById("email-input-q").value.trim();
+  const deadline = document.getElementById("deadline-input").value.trim();
+  const queryBody = document.getElementById("query-input").value.trim();
+  const brand = document.getElementById("brand-select").value;
+  const product = document.getElementById("product-input").value.trim();
+
+  if (!topic || !product) {
+    alert("Please fill in at least the topic and the product / angle.");
+    return;
+  }
+
+  const btn = this;
+  btn.disabled = true; btn.textContent = "Drafting...";
+  document.getElementById("pitch-result").innerHTML = '<div class="loading">Generating pitch...</div>';
+
+  try {
+    const firstName = (name || "").split(/\s+/)[0] || "there";
+    const brandInfo = brand === "Succulents Box"
+      ? "Succulents Box sells small live plants, succulents, cactuses, airplants, terrariums, and gift boxes. Catalog link to weave in: succulentsbox.com/collections/succulents-gift-boxes (or a more specific page like succulentsbox.com/collections/cactus or succulentsbox.com/collections/mangave). Sample budget under $35."
+      : "Photos to Sketches is a studio that turns personal photos into hand-drawn coloring pages, printed and bound into a personalized book. Etsy listing to weave in: etsy.com/listing/1869427260/custom-coloring-book-from-photos-12-24. Sample offered: 12-page custom coloring book.";
+
+    const exampleVoice =
+      "Example of the desired voice:\n---\n" +
+      "Subject: Submission for Father's Day Gift Guide, Mangave Live Plant\n\n" +
+      "Hi Helena,\n\n" +
+      "I'd love to submit Succulents Box for consideration in Prime Real Estate Magazine's Father's Day Gift Guide.\n\n" +
+      "For this guide, we'd love to feature one of our Mangave plants (succulentsbox.com/collections/mangave). Mangaves are a striking cross between Manfreda and Agave, with bold spotted, marbled foliage that looks more like a piece of living sculpture than a typical houseplant.\n\n" +
+      "We think it's a natural fit because a Mangave has real presence on a desk or shelf, and like the best gifts for busy dads, it asks for almost nothing in return.\n\n" +
+      "We'd be happy to send a Mangave for editorial review, ready well ahead of your May 22 deadline.\n\n" +
+      "Warm regards,\n[Your Name]\nSucculents Box\n---\n\n";
+
+    const prompt =
+      "Draft a media pitch email for " + brand + " in response to a journalist query. Match the example voice exactly: warm, natural, human prose with a clear 'why it fits' story.\n\n" +
+      exampleVoice +
+      "Brand info: " + brandInfo + "\n\n" +
+      "Journalist query:\n" +
+      "- Outlet: " + outlet + "\n" +
+      "- Journalist: " + name + " (first name: " + firstName + ")\n" +
+      "- Deadline: " + deadline + "\n" +
+      "- Topic: " + topic + "\n" +
+      "- Full query: " + queryBody + "\n\n" +
+      "Product or angle to feature: " + product + "\n\n" +
+      "Drafting rules:\n" +
+      "- Warm, natural, human prose. No corporate jargon, no cliches.\n" +
+      "- ABSOLUTELY NO em dashes. Use commas or periods.\n" +
+      "- Short paragraphs separated by blank lines.\n" +
+      "- Subject line: 'Subject: Submission for " + topic + ", " + product + "'.\n" +
+      "- Greeting: 'Hi " + firstName + ",'\n" +
+      "- Open with: 'I'd love to submit " + brand + " for consideration in " + outlet + "'s " + topic + ".'\n" +
+      "- One paragraph introducing the product with the catalog link in parentheses, weaving in a vivid detail and the fit.\n" +
+      "- Closing line: offer a sample and reference the deadline (" + deadline + ").\n" +
+      "- Sign off: 'Warm regards,' / '[Your Name]' / '" + brand + "'.\n" +
+      "- Length: keep it tight, 100 to 130 words in the body.\n\n" +
+      "Output ONLY the email (subject through signature). No commentary, no preamble.";
+
+    let pitchText = await callDraftApi(prompt);
+    pitchText = pitchText.trim();
+
+    let subject = "";
+    let body = pitchText;
+    const subjectMatch = pitchText.match(/^\s*Subject:\s*(.+?)\r?\n([\s\S]*)$/i);
+    if (subjectMatch) {
+      subject = subjectMatch[1].trim();
+      body = subjectMatch[2].replace(/^\s*\n/, "");
+    }
+
+    const resultEl = document.getElementById("pitch-result");
+    resultEl.innerHTML =
+      '<div class="send-fields">' +
+        '<div class="form-row">' +
+          '<label for="to-input">To</label>' +
+          '<input id="to-input" type="email" />' +
+        '</div>' +
+        '<div class="form-row">' +
+          '<label for="subject-input">Subject</label>' +
+          '<input id="subject-input" type="text" />' +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-bottom: 8px; font-size: 13px; font-weight: 600;">Email draft</div>' +
+      '<div class="pitch-output" id="pitch-text"></div>' +
+      '<button class="copy-btn primary" id="open-email-btn">Open in email</button>' +
+      '<button class="copy-btn" id="copy-btn">Copy to clipboard</button>' +
+      '<button class="copy-btn" id="regenerate-btn">Regenerate</button>';
+
+    document.getElementById("pitch-text").textContent = pitchText;
+    document.getElementById("to-input").value = email;
+    document.getElementById("subject-input").value = subject;
+
+    document.getElementById("open-email-btn").addEventListener("click", function() {
+      const to = document.getElementById("to-input").value.trim();
+      const subj = document.getElementById("subject-input").value.trim();
+      const url = "mailto:" + encodeURIComponent(to) +
+        "?subject=" + encodeURIComponent(subj) +
+        "&body=" + encodeURIComponent(body.trim());
+      window.location.href = url;
+    });
+    document.getElementById("copy-btn").addEventListener("click", function() {
+      navigator.clipboard.writeText(pitchText).then(function() {
+        const cb = document.getElementById("copy-btn");
+        cb.textContent = "Copied!";
+        setTimeout(function() { cb.textContent = "Copy to clipboard"; }, 2000);
+      });
+    });
+    document.getElementById("regenerate-btn").addEventListener("click", function() {
+      document.getElementById("generate-btn").click();
+    });
+  } catch (err) {
+    document.getElementById("pitch-result").innerHTML =
+      '<div class="error">Couldn\'t generate pitch: ' + escapeHtml(err.message) + '</div>';
+  } finally {
+    btn.disabled = false; btn.textContent = "Generate pitch";
+  }
+});
+
+(async function() {
+  const pw = getPassword();
+  if (pw) {
+    const ok = await tryLogin(pw);
+    if (ok) { showApp(); return; }
+    clearPassword();
+  }
+  showLogin();
+})();
+</script>
+</body>
+</html>
