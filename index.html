@@ -21,73 +21,90 @@ h1 { font-size: 22px; margin: 0 0 4px; }
 .subtitle { color: #777; font-size: 13px; margin-bottom: 20px; }
 
 .section { background: #fff; border: 1px solid #e5e3dc; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
-.section h2 { font-size: 16px; margin: 0 0 14px; }
+.section h2 { font-size: 16px; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+.date-pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 10px; border-radius: 10px; background: #eef2e3; color: #4f6a25; }
 
 .app-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
 .link-btn { background: transparent; border: none; color: #888; font-size: 12px; cursor: pointer; padding: 0; text-decoration: underline; }
 .link-btn:hover { color: #555; }
 
-.form-row { display: flex; flex-direction: column; margin-bottom: 12px; }
-.form-row.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.form-row.two-col > div { display: flex; flex-direction: column; }
-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-input, select, textarea {
-  font-family: inherit;
-  font-size: 14px;
-  padding: 9px 11px;
-  border: 1px solid #c8c5bb;
-  border-radius: 6px;
+.query-card {
+  border: 1px solid #e5e3dc;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
   background: #fff;
-  color: #2a2a2a;
-  width: 100%;
 }
-textarea { resize: vertical; min-height: 80px; }
-input:focus, select:focus, textarea:focus { outline: none; border-color: #6a8a3e; box-shadow: 0 0 0 2px rgba(106,138,62,0.15); }
+.query-card.selected { border-color: #6a8a3e; box-shadow: 0 0 0 3px rgba(106, 138, 62, 0.12); }
 
-button {
-  border: 1px solid #c8c5bb;
-  background: #fff;
-  padding: 9px 16px;
-  border-radius: 6px;
-  cursor: pointer;
+.qc-topic { font-size: 16px; font-weight: 700; color: #1d1c1d; margin-bottom: 4px; line-height: 1.3; }
+.qc-meta-line { font-size: 12.5px; color: #555; margin-bottom: 6px; }
+.qc-meta-line .meta-outlet { font-weight: 600; color: #2a2a2a; }
+.qc-deadline-line { font-size: 12.5px; color: #b65b1f; margin-bottom: 10px; }
+.qc-deadline-line .deadline-label { font-weight: 600; }
+.qc-query-body {
   font-size: 13px;
-  font-family: inherit;
-  color: #2a2a2a;
-  font-weight: 500;
+  color: #333;
+  white-space: pre-wrap;
+  background: #fafaf3;
+  border: 1px solid #f0eee5;
+  border-radius: 5px;
+  padding: 10px 12px;
+  max-height: 180px;
+  overflow-y: auto;
+  line-height: 1.55;
 }
+
+.qc-recs { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #f0eee5; }
+.rec-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 6px; border: 1px solid #e5e3dc; background: #fafaf7; }
+.rec-row.fit-yes { border-color: #c2d49c; background: #f3f6ea; }
+.rec-row.fit-no { border-color: #e5d8ce; background: #fbf6f1; }
+.rec-badge { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: white; margin-top: 1px; }
+.rec-badge.fit-yes { background: #6a8a3e; }
+.rec-badge.fit-no { background: #c4a594; }
+.rec-content { flex: 1; }
+.rec-brand { font-weight: 600; font-size: 13px; color: #2a2a2a; }
+.rec-verdict { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-left: 6px; font-weight: 600; }
+.rec-verdict.fit-yes { color: #4f6a25; }
+.rec-verdict.fit-no { color: #a07659; }
+.rec-reason { font-size: 12.5px; color: #555; margin-top: 2px; line-height: 1.45; }
+.rec-row.loading { font-size: 12px; color: #999; font-style: italic; padding: 8px 12px; }
+
+.qc-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+button { border: 1px solid #c8c5bb; background: #fff; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: inherit; color: #2a2a2a; font-weight: 500; }
 button:hover:not(:disabled) { background: #f3f1ea; }
 button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.btn-sb { background: #6a8a3e; color: white; border-color: #6a8a3e; }
+button.btn-sb:hover:not(:disabled) { background: #587431; }
+button.btn-pts { background: #c87a4a; color: white; border-color: #c87a4a; }
+button.btn-pts:hover:not(:disabled) { background: #ad673c; }
 button.primary { background: #6a8a3e; color: white; border-color: #6a8a3e; }
 button.primary:hover:not(:disabled) { background: #587431; }
+
+.brand-indicator { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-left: 8px; }
+.brand-indicator.sb { background: #f3f6ea; color: #4f6a25; }
+.brand-indicator.pts { background: #fbf3ec; color: #a05a30; }
+
+.form-row { display: flex; flex-direction: column; margin-bottom: 14px; }
+label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+input, select, textarea { font-family: inherit; font-size: 14px; padding: 9px 11px; border: 1px solid #c8c5bb; border-radius: 6px; background: #fff; color: #2a2a2a; width: 100%; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: #6a8a3e; box-shadow: 0 0 0 2px rgba(106,138,62,0.15); }
 
 .muted { color: #888; font-size: 13px; }
 .loading { color: #888; font-style: italic; }
 .error { color: #a04949; background: #fdf0f0; padding: 10px; border-radius: 5px; font-size: 13px; }
 
-.pitch-output {
-  background: #fdfcf8;
-  border: 1px solid #e5e3dc;
-  border-radius: 6px;
-  padding: 14px;
-  white-space: pre-wrap;
-  font-size: 13px;
-  line-height: 1.65;
-}
+.pitch-output { background: #fdfcf8; border: 1px solid #e5e3dc; border-radius: 6px; padding: 14px; white-space: pre-wrap; font-size: 13px; line-height: 1.65; }
 .copy-btn { margin-top: 10px; margin-right: 6px; }
 .send-fields { margin-bottom: 12px; padding: 12px; background: #f6f5ef; border: 1px solid #e5e3dc; border-radius: 6px; }
 .send-fields .form-row { margin-bottom: 8px; }
 .send-fields .form-row:last-child { margin-bottom: 0; }
 
-.login-box {
-  max-width: 360px;
-  margin: 80px auto;
-  background: #fff;
-  border: 1px solid #e5e3dc;
-  border-radius: 10px;
-  padding: 24px;
-}
+.login-box { max-width: 360px; margin: 80px auto; background: #fff; border: 1px solid #e5e3dc; border-radius: 10px; padding: 24px; }
 .login-box h1 { margin-bottom: 12px; }
 .login-box p { font-size: 13px; color: #777; margin-bottom: 16px; }
+
+.toolbar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
 </style>
 </head>
 <body>
@@ -111,59 +128,17 @@ button.primary:hover:not(:disabled) { background: #587431; }
   </div>
 
   <div class="section">
-    <h2>Journalist query</h2>
-    <div class="form-row">
-      <label for="paste-input">Paste the full Slack query (auto-fills the fields below)</label>
-      <textarea id="paste-input" rows="5" placeholder="SUMMARY: ...&#10;CATEGORY: ...&#10;NAME: ...&#10;EMAIL: ...&#10;MEDIA OUTLET: ...&#10;DEADLINE DATE: ...&#10;QUERY: ..."></textarea>
-    </div>
-    <button id="parse-btn">Parse paste</button>
-
-    <hr style="border: none; border-top: 1px solid #eeece4; margin: 16px 0;">
-
-    <div class="form-row">
-      <label for="topic-input">Topic / feature name</label>
-      <input id="topic-input" type="text" placeholder="e.g. Father's Day Gift Guide" />
-    </div>
-    <div class="form-row two-col">
-      <div>
-        <label for="name-input">Journalist name</label>
-        <input id="name-input" type="text" placeholder="e.g. Bryan Elliott" />
-      </div>
-      <div>
-        <label for="outlet-input">Outlet</label>
-        <input id="outlet-input" type="text" placeholder="e.g. Inc. Magazine" />
-      </div>
-    </div>
-    <div class="form-row two-col">
-      <div>
-        <label for="email-input-q">Journalist email</label>
-        <input id="email-input-q" type="email" placeholder="e.g. producer@thegoodbrain.com" />
-      </div>
-      <div>
-        <label for="deadline-input">Deadline</label>
-        <input id="deadline-input" type="text" placeholder="e.g. 2026-05-17" />
-      </div>
-    </div>
-    <div class="form-row">
-      <label for="query-input">Query body</label>
-      <textarea id="query-input" rows="4" placeholder="The journalist's full request..."></textarea>
-    </div>
+    <h2>Today's queries <span id="today-pill" class="date-pill"></span></h2>
+    <div class="toolbar"><button id="reload-btn">Reload</button></div>
+    <div id="queries-list"><div class="loading">Loading queries from Slack...</div></div>
   </div>
 
-  <div class="section">
-    <h2>Draft pitch</h2>
-    <div class="form-row two-col">
-      <div>
-        <label for="brand-select">Brand</label>
-        <select id="brand-select">
-          <option value="Succulents Box">Succulents Box</option>
-          <option value="Photos to Sketches">Photos to Sketches</option>
-        </select>
-      </div>
-      <div>
-        <label for="product-input">Product or angle</label>
-        <input id="product-input" type="text" placeholder="e.g. a live cactus" />
-      </div>
+  <div class="section" id="draft-section" style="display:none;">
+    <h2>Draft pitch <span id="brand-tag" class="brand-indicator sb"></span></h2>
+    <div id="selected-query-info" class="muted" style="margin-bottom: 14px;"></div>
+    <div class="form-row">
+      <label for="product-input">Specific product or angle</label>
+      <input id="product-input" type="text" placeholder="e.g. a live cactus, the Mangave starter plant" />
     </div>
     <button id="generate-btn" class="primary">Generate pitch</button>
     <div id="pitch-result" style="margin-top: 16px;"></div>
@@ -172,6 +147,19 @@ button.primary:hover:not(:disabled) { background: #587431; }
 
 <script>
 const PW_KEY = "pitch-drafter-pw";
+let selectedQuery = null;
+let selectedBrand = null;
+
+const BRANDS = {
+  "Succulents Box": {
+    intro: "Succulents Box sells small live plants, succulents, cactuses, airplants, terrariums, and gift boxes.",
+    bestFit: "Home & Garden, Lifestyle, gifting, sustainable gifts, low-maintenance plants, desk decor.",
+  },
+  "Photos to Sketches": {
+    intro: "Photos to Sketches turns personal photos into hand-drawn coloring pages, printed and bound into a personalized 12-page book.",
+    bestFit: "Home & Lifestyle, gifting, personalized/custom gifts, hobbies, wellness/slow-down gifts.",
+  }
+};
 
 function getPassword() { return localStorage.getItem(PW_KEY) || ""; }
 function setPassword(pw) { localStorage.setItem(PW_KEY, pw); }
@@ -184,14 +172,23 @@ function escapeHtml(s) {
   });
 }
 
-async function callDraftApi(prompt) {
-  const resp = await fetch("/api/draft", {
+function todayDateISO() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+
+function tsToLocalDateISO(ts) {
+  const seconds = parseFloat(ts);
+  if (!seconds) return "";
+  const d = new Date(seconds * 1000);
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+
+async function callApi(path, body) {
+  const resp = await fetch(path, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-app-password": getPassword(),
-    },
-    body: JSON.stringify({ prompt }),
+    headers: { "Content-Type": "application/json", "x-app-password": getPassword() },
+    body: JSON.stringify(body || {}),
   });
   if (resp.status === 401) {
     clearPassword();
@@ -199,44 +196,45 @@ async function callDraftApi(prompt) {
     throw new Error("Unauthorized");
   }
   if (!resp.ok) {
-    const text = await resp.text();
-    throw new Error("Error " + resp.status + ": " + text);
+    const t = await resp.text();
+    throw new Error("HTTP " + resp.status + ": " + t);
   }
-  const data = await resp.json();
+  return resp.json();
+}
+
+async function callDraftApi(prompt) {
+  const data = await callApi("/api/draft", { prompt });
   return data.text || "";
+}
+
+async function callSheetApi() {
+  const data = await callApi("/api/sheet", {});
+  return data.messages || [];
 }
 
 function showLogin(errorMsg) {
   document.getElementById("login-screen").style.display = "block";
   document.getElementById("app-screen").style.display = "none";
   const err = document.getElementById("login-error");
-  if (errorMsg) {
-    err.textContent = errorMsg;
-    err.style.display = "block";
-  } else {
-    err.style.display = "none";
-  }
+  if (errorMsg) { err.textContent = errorMsg; err.style.display = "block"; }
+  else { err.style.display = "none"; }
 }
 
 function showApp() {
   document.getElementById("login-screen").style.display = "none";
   document.getElementById("app-screen").style.display = "block";
+  loadQueries();
 }
 
 async function tryLogin(password) {
   try {
     const resp = await fetch("/api/draft", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-app-password": password,
-      },
+      headers: { "Content-Type": "application/json", "x-app-password": password },
       body: JSON.stringify({ ping: true }),
     });
     return resp.status === 200;
-  } catch (err) {
-    return false;
-  }
+  } catch { return false; }
 }
 
 document.getElementById("login-btn").addEventListener("click", async function() {
@@ -246,74 +244,172 @@ document.getElementById("login-btn").addEventListener("click", async function() 
   btn.disabled = true; btn.textContent = "Checking...";
   const ok = await tryLogin(pw);
   btn.disabled = false; btn.textContent = "Unlock";
-  if (ok) {
-    setPassword(pw);
-    showApp();
-  } else {
+  if (ok) { setPassword(pw); showApp(); }
+  else {
     const err = document.getElementById("login-error");
     err.textContent = "Incorrect password.";
     err.style.display = "block";
   }
 });
-
 document.getElementById("password-input").addEventListener("keydown", function(e) {
   if (e.key === "Enter") document.getElementById("login-btn").click();
 });
-
 document.getElementById("logout-btn").addEventListener("click", function() {
   clearPassword();
   document.getElementById("password-input").value = "";
   showLogin();
 });
+document.getElementById("reload-btn").addEventListener("click", loadQueries);
 
-document.getElementById("parse-btn").addEventListener("click", function() {
-  const text = document.getElementById("paste-input").value;
-  if (!text.trim()) return;
-  const get = function(label) {
-    const re = new RegExp(label + ":\\s*(.+)", "i");
-    const m = text.match(re);
-    if (!m) return "";
-    return m[1].trim()
-      .replace(/^<mailto:([^|>]+).*$/, "$1")
-      .replace(/^<(https?:[^>]+)>.*$/, "$1");
-  };
-  const summary = get("SUMMARY");
-  const name = get("NAME");
-  const email = get("EMAIL");
-  const outlet = get("MEDIA OUTLET");
-  const deadlineDate = get("DEADLINE DATE");
-  const queryMatch = text.match(/QUERY:\s*([\s\S]+)$/i);
-  const queryBody = queryMatch ? queryMatch[1].trim() : "";
+async function loadQueries() {
+  document.getElementById("today-pill").textContent = todayDateISO();
+  const list = document.getElementById("queries-list");
+  list.innerHTML = '<div class="loading">Loading queries from the sheet...</div>';
+  try {
+    const messages = await callSheetApi();
+    renderQueries(messages);
+  } catch (err) {
+    list.innerHTML = '<div class="error">Couldn\'t load the sheet: ' + escapeHtml(err.message) + '</div>';
+  }
+}
 
-  if (summary) document.getElementById("topic-input").value = summary;
-  if (name) document.getElementById("name-input").value = name;
-  if (outlet) document.getElementById("outlet-input").value = outlet;
-  if (email) document.getElementById("email-input-q").value = email;
-  if (deadlineDate) document.getElementById("deadline-input").value = deadlineDate;
-  if (queryBody) document.getElementById("query-input").value = queryBody;
-});
+function isGiftBag(msg) {
+  if (msg.category && /gift bag/i.test(msg.category)) return true;
+  if (/gift bag|swag box/i.test(msg.summary || "")) return true;
+  return false;
+}
+
+function renderQueries(messages) {
+  const today = todayDateISO();
+  const list = document.getElementById("queries-list");
+  list.innerHTML = "";
+  const todayMsgs = messages.filter(function(m) { return (m.date || "") === today; });
+  const toShow = todayMsgs.length > 0 ? todayMsgs : messages.slice(0, 3);
+  if (todayMsgs.length === 0) {
+    const note = document.createElement("div");
+    note.className = "muted";
+    note.style.marginBottom = "10px";
+    note.textContent = "No queries dated today. Showing the most recent few instead.";
+    list.appendChild(note);
+  }
+  toShow.forEach(function(m) { list.appendChild(renderCard(m)); });
+}
+
+function renderCard(msg) {
+  const card = document.createElement("div");
+  card.className = "query-card";
+  const giftBag = isGiftBag(msg);
+  const recsId = "recs-" + (msg.ts || Math.random().toString(36).slice(2));
+
+  const deadlineParts = [];
+  if (msg.deadlineDate) deadlineParts.push(msg.deadlineDate);
+  if (msg.deadlineTime) deadlineParts.push(msg.deadlineTime);
+  if (msg.tz) deadlineParts.push(msg.tz.replace("Eastern Standard Time","ET").replace("Pacific Standard Time","PT"));
+  const deadlineStr = deadlineParts.join(" ");
+
+  const metaBits = [];
+  if (msg.outlet) metaBits.push('<span class="meta-outlet">' + escapeHtml(msg.outlet) + '</span>');
+  if (msg.name) metaBits.push(escapeHtml(msg.name));
+  if (msg.email) metaBits.push('<a href="mailto:' + escapeHtml(msg.email) + '">' + escapeHtml(msg.email) + '</a>');
+
+  card.innerHTML =
+    '<div class="qc-topic">' + escapeHtml(msg.summary) + '</div>' +
+    '<div class="qc-meta-line">' + metaBits.join(' &middot; ') + '</div>' +
+    (deadlineStr ? '<div class="qc-deadline-line"><span class="deadline-label">Deadline:</span> ' + escapeHtml(deadlineStr) + '</div>' : '') +
+    '<div class="qc-query-body">' + escapeHtml(msg.queryText) + '</div>' +
+    '<div class="qc-recs" id="' + recsId + '">' +
+      (giftBag
+        ? '<div class="rec-row fit-no"><div class="rec-badge fit-no">x</div><div class="rec-content"><span class="rec-brand">Both brands</span><span class="rec-verdict fit-no">Skip</span><div class="rec-reason">Gift bag fulfillment request, neither brand participates.</div></div></div>'
+        : '<div class="rec-row loading">Checking brand fit...</div>') +
+    '</div>' +
+    '<div class="qc-actions">' +
+      '<button class="btn-sb pitch-sb-btn"' + (giftBag ? ' disabled' : '') + '>Pitch as Succulents Box</button>' +
+      '<button class="btn-pts pitch-pts-btn"' + (giftBag ? ' disabled' : '') + '>Pitch as Photos to Sketches</button>' +
+    '</div>';
+
+  if (!giftBag) {
+    card.querySelector(".pitch-sb-btn").addEventListener("click", function() { selectQuery(msg, card, "Succulents Box"); });
+    card.querySelector(".pitch-pts-btn").addEventListener("click", function() { selectQuery(msg, card, "Photos to Sketches"); });
+    loadRecommendations(msg, recsId);
+  }
+  return card;
+}
+
+async function loadRecommendations(msg, recsId) {
+  try {
+    const prompt =
+      "Evaluate whether each of these two brands fits the journalist query below. Be strict: only say a brand fits if it would belong in the feature without forcing it.\n\n" +
+      "QUERY:\nOutlet: " + msg.outlet + "\nTopic: " + msg.summary + "\nDetails: " + msg.queryText + "\n\n" +
+      "BRAND 1: Succulents Box\nProducts: " + BRANDS["Succulents Box"].intro + "\nBest fit: " + BRANDS["Succulents Box"].bestFit + "\n\n" +
+      "BRAND 2: Photos to Sketches\nProducts: " + BRANDS["Photos to Sketches"].intro + "\nBest fit: " + BRANDS["Photos to Sketches"].bestFit + "\n\n" +
+      "Respond with ONLY a JSON object in this exact format, no markdown:\n" +
+      '{"succulents_box":{"fit":true,"reason":"one short sentence"},"photos_to_sketches":{"fit":false,"reason":"one short sentence"}}';
+    const raw = await callDraftApi(prompt);
+    let text = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+    const s = text.indexOf("{"), e = text.lastIndexOf("}");
+    if (s >= 0 && e > s) text = text.slice(s, e + 1);
+    const data = JSON.parse(text);
+    const el = document.getElementById(recsId);
+    if (!el) return;
+    el.innerHTML = renderRecRow("Succulents Box", data.succulents_box) + renderRecRow("Photos to Sketches", data.photos_to_sketches);
+  } catch (err) {
+    const el = document.getElementById(recsId);
+    if (el) el.innerHTML = '<div class="rec-row loading">Couldn\'t evaluate fit automatically. Use the buttons below to pitch either brand.</div>';
+  }
+}
+
+function renderRecRow(brand, info) {
+  const fit = info && info.fit;
+  const cls = fit ? "fit-yes" : "fit-no";
+  return '<div class="rec-row ' + cls + '">' +
+    '<div class="rec-badge ' + cls + '">' + (fit ? "&#10003;" : "&mdash;") + '</div>' +
+    '<div class="rec-content">' +
+      '<span class="rec-brand">' + escapeHtml(brand) + '</span>' +
+      '<span class="rec-verdict ' + cls + '">' + (fit ? "Good fit" : "Skip") + '</span>' +
+      '<div class="rec-reason">' + escapeHtml((info && info.reason) || "") + '</div>' +
+    '</div></div>';
+}
+
+function selectQuery(msg, cardEl, brand) {
+  selectedQuery = msg;
+  selectedBrand = brand;
+  const cards = document.querySelectorAll(".query-card");
+  for (let i = 0; i < cards.length; i++) cards[i].classList.remove("selected");
+  cardEl.classList.add("selected");
+
+  const draftSection = document.getElementById("draft-section");
+  draftSection.style.display = "block";
+
+  const brandTag = document.getElementById("brand-tag");
+  brandTag.textContent = brand;
+  brandTag.className = "brand-indicator " + (brand === "Succulents Box" ? "sb" : "pts");
+
+  const productInput = document.getElementById("product-input");
+  if (brand === "Photos to Sketches") {
+    productInput.value = "12-page custom coloring book";
+    productInput.placeholder = "Product / angle (default: 12-page custom coloring book)";
+  } else {
+    productInput.value = "";
+    productInput.placeholder = "e.g. a live cactus, the Mangave starter plant";
+  }
+  document.getElementById("selected-query-info").innerHTML =
+    "<strong>Drafting for:</strong> " + escapeHtml(msg.summary) + " (" + escapeHtml(msg.outlet) + ", deadline " + escapeHtml(msg.deadlineDate) + ")";
+  document.getElementById("pitch-result").innerHTML = "";
+  draftSection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 document.getElementById("generate-btn").addEventListener("click", async function() {
-  const topic = document.getElementById("topic-input").value.trim();
-  const name = document.getElementById("name-input").value.trim();
-  const outlet = document.getElementById("outlet-input").value.trim();
-  const email = document.getElementById("email-input-q").value.trim();
-  const deadline = document.getElementById("deadline-input").value.trim();
-  const queryBody = document.getElementById("query-input").value.trim();
-  const brand = document.getElementById("brand-select").value;
+  if (!selectedQuery || !selectedBrand) return;
+  const brand = selectedBrand;
   const product = document.getElementById("product-input").value.trim();
-
-  if (!topic || !product) {
-    alert("Please fill in at least the topic and the product / angle.");
-    return;
-  }
+  if (!product) { alert("Please name the specific product or angle to feature."); return; }
 
   const btn = this;
   btn.disabled = true; btn.textContent = "Drafting...";
   document.getElementById("pitch-result").innerHTML = '<div class="loading">Generating pitch...</div>';
 
   try {
-    const firstName = (name || "").split(/\s+/)[0] || "there";
+    const firstName = (selectedQuery.name || "").split(/\s+/)[0] || "there";
     const brandInfo = brand === "Succulents Box"
       ? "Succulents Box sells small live plants, succulents, cactuses, airplants, terrariums, and gift boxes. Catalog link to weave in: succulentsbox.com/collections/succulents-gift-boxes (or a more specific page like succulentsbox.com/collections/cactus or succulentsbox.com/collections/mangave). Sample budget under $35."
       : "Photos to Sketches is a studio that turns personal photos into hand-drawn coloring pages, printed and bound into a personalized book. Etsy listing to weave in: etsy.com/listing/1869427260/custom-coloring-book-from-photos-12-24. Sample offered: 12-page custom coloring book.";
@@ -333,27 +429,26 @@ document.getElementById("generate-btn").addEventListener("click", async function
       exampleVoice +
       "Brand info: " + brandInfo + "\n\n" +
       "Journalist query:\n" +
-      "- Outlet: " + outlet + "\n" +
-      "- Journalist: " + name + " (first name: " + firstName + ")\n" +
-      "- Deadline: " + deadline + "\n" +
-      "- Topic: " + topic + "\n" +
-      "- Full query: " + queryBody + "\n\n" +
+      "- Outlet: " + selectedQuery.outlet + "\n" +
+      "- Journalist: " + selectedQuery.name + " (first name: " + firstName + ")\n" +
+      "- Deadline: " + selectedQuery.deadlineDate + " " + selectedQuery.deadlineTime + " " + selectedQuery.tz + "\n" +
+      "- Topic: " + selectedQuery.summary + "\n" +
+      "- Full query: " + selectedQuery.queryText + "\n\n" +
       "Product or angle to feature: " + product + "\n\n" +
       "Drafting rules:\n" +
       "- Warm, natural, human prose. No corporate jargon, no cliches.\n" +
       "- ABSOLUTELY NO em dashes. Use commas or periods.\n" +
       "- Short paragraphs separated by blank lines.\n" +
-      "- Subject line: 'Subject: Submission for " + topic + ", " + product + "'.\n" +
+      "- Subject line: 'Subject: Submission for " + selectedQuery.summary + ", " + product + "'.\n" +
       "- Greeting: 'Hi " + firstName + ",'\n" +
-      "- Open with: 'I'd love to submit " + brand + " for consideration in " + outlet + "'s " + topic + ".'\n" +
+      "- Open with: 'I'd love to submit " + brand + " for consideration in " + selectedQuery.outlet + "'s " + selectedQuery.summary + ".'\n" +
       "- One paragraph introducing the product with the catalog link in parentheses, weaving in a vivid detail and the fit.\n" +
-      "- Closing line: offer a sample and reference the deadline (" + deadline + ").\n" +
+      "- Closing line: offer a sample and reference the deadline (" + selectedQuery.deadlineDate + ").\n" +
       "- Sign off: 'Warm regards,' / '[Your Name]' / '" + brand + "'.\n" +
       "- Length: keep it tight, 100 to 130 words in the body.\n\n" +
       "Output ONLY the email (subject through signature). No commentary, no preamble.";
 
-    let pitchText = await callDraftApi(prompt);
-    pitchText = pitchText.trim();
+    let pitchText = (await callDraftApi(prompt)).trim();
 
     let subject = "";
     let body = pitchText;
@@ -366,14 +461,8 @@ document.getElementById("generate-btn").addEventListener("click", async function
     const resultEl = document.getElementById("pitch-result");
     resultEl.innerHTML =
       '<div class="send-fields">' +
-        '<div class="form-row">' +
-          '<label for="to-input">To</label>' +
-          '<input id="to-input" type="email" />' +
-        '</div>' +
-        '<div class="form-row">' +
-          '<label for="subject-input">Subject</label>' +
-          '<input id="subject-input" type="text" />' +
-        '</div>' +
+        '<div class="form-row"><label for="to-input">To</label><input id="to-input" type="email" /></div>' +
+        '<div class="form-row"><label for="subject-input">Subject</label><input id="subject-input" type="text" /></div>' +
       '</div>' +
       '<div style="margin-bottom: 8px; font-size: 13px; font-weight: 600;">Email draft</div>' +
       '<div class="pitch-output" id="pitch-text"></div>' +
@@ -382,15 +471,13 @@ document.getElementById("generate-btn").addEventListener("click", async function
       '<button class="copy-btn" id="regenerate-btn">Regenerate</button>';
 
     document.getElementById("pitch-text").textContent = pitchText;
-    document.getElementById("to-input").value = email;
+    document.getElementById("to-input").value = (selectedQuery.email || "").trim();
     document.getElementById("subject-input").value = subject;
 
     document.getElementById("open-email-btn").addEventListener("click", function() {
       const to = document.getElementById("to-input").value.trim();
       const subj = document.getElementById("subject-input").value.trim();
-      const url = "mailto:" + encodeURIComponent(to) +
-        "?subject=" + encodeURIComponent(subj) +
-        "&body=" + encodeURIComponent(body.trim());
+      const url = "mailto:" + encodeURIComponent(to) + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(body.trim());
       window.location.href = url;
     });
     document.getElementById("copy-btn").addEventListener("click", function() {
@@ -404,8 +491,7 @@ document.getElementById("generate-btn").addEventListener("click", async function
       document.getElementById("generate-btn").click();
     });
   } catch (err) {
-    document.getElementById("pitch-result").innerHTML =
-      '<div class="error">Couldn\'t generate pitch: ' + escapeHtml(err.message) + '</div>';
+    document.getElementById("pitch-result").innerHTML = '<div class="error">Couldn\'t generate pitch: ' + escapeHtml(err.message) + '</div>';
   } finally {
     btn.disabled = false; btn.textContent = "Generate pitch";
   }
