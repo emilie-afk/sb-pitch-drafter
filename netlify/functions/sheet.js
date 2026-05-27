@@ -66,8 +66,11 @@ exports.handler = async function(event) {
       return -1;
     };
 
+    // Column A is ALWAYS Date Posted in the sheet — hardcode rather than
+    // hunt by header name so a renamed/missing header never breaks loading.
+    // Header lookup is still used for the other (less critical) columns.
     const COL = {
-      date: findCol(["query date", "date", "date posted"]),
+      date: 0,
       deadlineDate: findCol(["deadline", "deadline date"]),
       deadlineTime: findCol(["deadline time"]),
       tz: findCol(["time zone", "timezone", "tz"]),
