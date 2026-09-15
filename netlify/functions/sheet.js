@@ -20,6 +20,17 @@
 //   Content / Query / Query body       -> queryText
 //   Journalist name / Name / Journalist -> name
 //   Category                           -> category
+//
+// Brand-fit columns, written by the Apps Script automation. The browser only
+// DISPLAYS these -- it never calls a model to judge fit.
+//   Fit to pitch                       -> fitToPitch     (Y / N)
+//   Succulents Box fit                 -> sbFit          (Y / N, blank = pending)
+//   Photos to Sketches fit             -> ptsFit         (Y / N, blank = pending)
+//   Succulents Box reason              -> sbReason
+//   Photos to Sketches reason          -> ptsReason
+//   Query ID                           -> queryId
+//   Source                             -> source         (HARO / SOS)
+//   Fit assessed at                    -> assessedAt
 
 exports.handler = async function(event) {
   if (event.httpMethod === "OPTIONS") {
@@ -81,6 +92,16 @@ exports.handler = async function(event) {
       queryText: findCol(["content", "query", "query body"]),
       name: findCol(["journalist name", "name", "journalist"]),
       category: findCol(["category"]),
+
+      // Stored brand-fit results (K-R), written by the Apps Script automation.
+      fitToPitch: findCol(["fit to pitch"]),
+      sbFit: findCol(["succulents box fit"]),
+      ptsFit: findCol(["photos to sketches fit"]),
+      sbReason: findCol(["succulents box reason"]),
+      ptsReason: findCol(["photos to sketches reason"]),
+      queryId: findCol(["query id"]),
+      source: findCol(["source"]),
+      assessedAt: findCol(["fit assessed at"]),
     };
 
     const getCell = function(row, idx) {
@@ -109,6 +130,16 @@ exports.handler = async function(event) {
         queryText: getCell(row, COL.queryText),
         name: getCell(row, COL.name),
         category: getCell(row, COL.category),
+
+        // Stored assessment — blank sbFit/ptsFit means "not assessed yet"
+        fitToPitch: getCell(row, COL.fitToPitch).toUpperCase(),
+        sbFit: getCell(row, COL.sbFit).toUpperCase(),
+        ptsFit: getCell(row, COL.ptsFit).toUpperCase(),
+        sbReason: getCell(row, COL.sbReason),
+        ptsReason: getCell(row, COL.ptsReason),
+        queryId: getCell(row, COL.queryId),
+        source: getCell(row, COL.source),
+        assessedAt: getCell(row, COL.assessedAt),
       });
     }
 
