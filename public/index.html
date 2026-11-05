@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Daily Pitch Drafter</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #fafaf7;
+  color: #2a2a2a;
+  line-height: 1.55;
+  padding: 20px;
+}
+.container { max-width: 760px; margin: 0 auto; }
+
+h1 { font-size: 22px; margin: 0 0 4px; }
+.subtitle { color: #777; font-size: 13px; margin-bottom: 20px; }
+
+.section { background: #fff; border: 1px solid #e5e3dc; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+.section h2 { font-size: 16px; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+.date-pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 10px; border-radius: 10px; background: #eef2e3; color: #4f6a25; }
+
+.app-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+.link-btn { background: transparent; border: none; color: #888; font-size: 12px; cursor: pointer; padding: 0; text-decoration: underline; }
+.link-btn:hover { color: #555; }
+
+.query-card {
+  border: 1px solid #e5e3dc;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  background: #fff;
+}
+.query-card.selected { border-color: #6a8a3e; box-shadow: 0 0 0 3px rgba(106, 138, 62, 0.12); }
+
+.qc-topic { font-size: 16px; font-weight: 700; color: #1d1c1d; margin-bottom: 4px; line-height: 1.3; }
+.qc-meta-line { font-size: 12.5px; color: #555; margin-bottom: 6px; }
+.qc-meta-line .meta-outlet { font-weight: 600; color: #2a2a2a; }
+.qc-deadline-line { font-size: 12.5px; color: #b65b1f; margin-bottom: 10px; }
+.qc-deadline-line .deadline-label { font-weight: 600; }
+.qc-query-body {
+  font-size: 13px;
+  color: #333;
+  white-space: pre-wrap;
+  background: #fafaf3;
+  border: 1px solid #f0eee5;
+  border-radius: 5px;
+  padding: 10px 12px;
+  max-height: 180px;
+  overflow-y: auto;
+  line-height: 1.55;
+}
+
+.qc-recs { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #f0eee5; }
+.rec-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 6px; border: 1px solid #e5e3dc; background: #fafaf7; }
+.rec-row.fit-yes { border-color: #c2d49c; background: #f3f6ea; }
+.rec-row.fit-no { border-color: #e5d8ce; background: #fbf6f1; }
+.rec-badge { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: white; margin-top: 1px; }
+.rec-badge.fit-yes { background: #6a8a3e; }
+.rec-badge.fit-no { background: #c4a594; }
+.rec-content { flex: 1; }
+.rec-brand { font-weight: 600; font-size: 13px; color: #2a2a2a; }
+.rec-verdict { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-left: 6px; font-weight: 600; }
+.rec-verdict.fit-yes { color: #4f6a25; }
+.rec-verdict.fit-no { color: #a07659; }
+.rec-reason { font-size: 12.5px; color: #555; margin-top: 2px; line-height: 1.45; }
+.rec-row.loading { font-size: 12px; color: #999; font-style: italic; padding: 8px 12px; }
+
+.qc-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+button { border: 1px solid #c8c5bb; background: #fff; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: inherit; color: #2a2a2a; font-weight: 500; }
+button:hover:not(:disabled) { background: #f3f1ea; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.btn-sb { background: #6a8a3e; color: white; border-color: #6a8a3e; }
+button.btn-sb:hover:not(:disabled) { background: #587431; }
+button.btn-pts { background: #c87a4a; color: white; border-color: #c87a4a; }
+button.btn-pts:hover:not(:disabled) { background: #ad673c; }
+button.primary { background: #6a8a3e; color: white; border-color: #6a8a3e; }
+button.primary:hover:not(:disabled) { background: #587431; }
+
+.brand-indicator { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-left: 8px; }
+.brand-indicator.sb { background: #f3f6ea; color: #4f6a25; }
+.brand-indicator.pts { background: #fbf3ec; color: #a05a30; }
+
+.form-row { display: flex; flex-direction: column; margin-bottom: 14px; }
+label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+input, select, textarea { font-family: inherit; font-size: 14px; padding: 9px 11px; border: 1px solid #c8c5bb; border-radius: 6px; background: #fff; color: #2a2a2a; width: 100%; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: #6a8a3e; box-shadow: 0 0 0 2px rgba(106,138,62,0.15); }
+
+.muted { color: #888; font-size: 13px; }
+.loading { color: #888; font-style: italic; }
+.error { color: #a04949; background: #fdf0f0; padding: 10px; border-radius: 5px; font-size: 13px; }
+
+.pitch-output { background: #fdfcf8; border: 1px solid #e5e3dc; border-radius: 6px; padding: 14px; white-space: pre-wrap; font-size: 13px; line-height: 1.65; }
+.copy-btn { margin-top: 10px; margin-right: 6px; }
+.send-fields { margin-bottom: 12px; padding: 12px; background: #f6f5ef; border: 1px solid #e5e3dc; border-radius: 6px; }
+.send-fields .form-row { margin-bottom: 8px; }
+.send-fields .form-row:last-child { margin-bottom: 0; }
+
+.post-send-reminder {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: #fff4e0;
+  border: 1px solid #e8d3a8;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #6b4e1a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.post-send-reminder .reminder-text { flex: 1; min-width: 200px; }
+.post-send-reminder a.tracker-btn {
+  display: inline-block;
+  padding: 7px 13px;
+  background: #b6862b;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.post-send-reminder a.tracker-btn:hover { background: #976f1f; }
+
+.login-box { max-width: 360px; margin: 80px auto; background: #fff; border: 1px solid #e5e3dc; border-radius: 10px; padding: 24px; }
+.login-box h1 { margin-bottom: 12px; }
+.login-box p { font-size: 13px; color: #777; margin-bottom: 16px; }
+
+.toolbar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Daily Pitch Drafter</h1>
+    <p>Enter the app password to continue.</p>
+    <div class="form-row">
+      <input id="password-input" type="password" placeholder="App password" autocomplete="current-password" />
+    </div>
+    <button id="login-btn" class="primary">Unlock</button>
+    <div id="login-error" class="error" style="display:none; margin-top: 10px;"></div>
+  </div>
+</div>
+
+<div id="app-screen" class="container" style="display:none;">
+  <div class="app-header">
+    <h1>Daily Pitch Drafter</h1>
+    <button id="logout-btn" class="link-btn">Log out</button>
+  </div>
+  <div id="logout-error" class="error" role="alert" style="display:none; margin-bottom: 12px;"></div>
+
+  <div class="section">
+    <h2>Today's queries <span id="today-pill" class="date-pill"></span></h2>
+    <div class="toolbar"><button id="reload-btn">Reload</button></div>
+    <div id="queries-list"><div class="loading">Loading queries from Slack...</div></div>
+  </div>
+
+  <div class="section" id="draft-section" style="display:none;">
+    <h2>Draft pitch <span id="brand-tag" class="brand-indicator sb"></span></h2>
+    <div id="selected-query-info" class="muted" style="margin-bottom: 14px;"></div>
+    <div class="form-row">
+      <label for="product-input">Product to feature</label>
+      <input id="product-input" type="text" placeholder="e.g. Personalized family ornament with family name and year" />
+    </div>
+    <div class="form-row">
+      <label for="product-link-input">Product link (optional)</label>
+      <input id="product-link-input" type="text" placeholder="Paste a product or collection URL, if you have one" />
+    </div>
+    <div class="form-row">
+      <label for="price-input">Price or price range (optional)</label>
+      <input id="price-input" type="text" placeholder="e.g. $29.99, From $24.99, Under $35, $25-$35" />
+    </div>
+    <button id="generate-btn" class="primary">Generate pitch</button>
+    <div id="pitch-result" style="margin-top: 16px;"></div>
+  </div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>

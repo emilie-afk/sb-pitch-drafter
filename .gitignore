@@ -1,0 +1,10 @@
+node_modules/
+.netlify/
+.env
+.env.*
+!.env.example
+# Real prompt packs and private tooling never go into Git.
+private/
+*.private.json
+prompt-pack*.json
+test-results/

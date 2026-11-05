@@ -1,0 +1,59 @@
+{
+  "version": "synthetic-1",
+  "draft": {
+    "template": "SYNTHETIC TEMPLATE for {{brand}}\nINTRO {{brand_intro}}\nCATALOG {{catalog}}\nPRODUCT {{product}}\nLINK {{link}}\nPRICE {{price}}\nOUTLET {{outlet}}\nJOURNALIST {{journalist}}\nGREETING {{greeting}}\nDEADLINE {{deadline}}\nTOPIC {{topic}}\nQUERY {{query_text}}\nRULE {{link_rule}}\nSAMPLE before your {{deadline_date}} deadline\nVOICE\n{{voice}}\n{{extra_sections}}\nLENGTH {{body_length}}\n\n{{examples}}\nEND",
+    "defaultBodyLength": "Synthetic default length.",
+    "defaultExampleGuidance": [
+      "Synthetic default guidance."
+    ],
+    "noExampleText": "Synthetic: no example.",
+    "examplesHeader": "SYNTHETIC {{brand_upper}} EXAMPLE{{plural}}:",
+    "examplesFooterLabel": "Synthetic usage:",
+    "brands": {
+      "Succulents Box": {
+        "intro": "Synthetic plant shop.",
+        "catalog": [
+          "Alpha",
+          "Beta"
+        ],
+        "voice": [
+          "Synthetic voice one."
+        ],
+        "linkRule": "Synthetic link rule A.",
+        "examples": [
+          "Synthetic example A1"
+        ],
+        "appendAfterDraft": "About Synthetic Plant Shop\nSynthetic boilerplate."
+      },
+      "Photos to Sketches": {
+        "intro": "Synthetic gift shop.",
+        "catalog": [
+          "Gamma"
+        ],
+        "voice": [
+          "Synthetic voice two."
+        ],
+        "linkRule": "Synthetic link rule B.",
+        "bodyLength": "Synthetic short length.",
+        "extraSections": [
+          {
+            "title": "SYNTHETIC SECTION",
+            "lines": [
+              "line x"
+            ]
+          }
+        ],
+        "exampleGuidance": [
+          "Synthetic guidance B."
+        ],
+        "examples": [
+          "Synthetic example B1",
+          "Synthetic example B2"
+        ]
+      }
+    }
+  },
+  "assess": {
+    "brandSpec": "SYNTHETIC BRAND SPEC for assessment tests."
+  }
+}
